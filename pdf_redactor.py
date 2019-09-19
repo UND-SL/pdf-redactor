@@ -152,7 +152,8 @@ def update_metadata(trailer, options):
 				value = value.decode()
 
 			# Filter the value.
-			value = f(value)
+			if value is not None:
+				value = f(value)
 
 			# Convert Python data type to PdfString.
 			if isinstance(value, str) or (sys.version_info < (3,) and isinstance(value, unicode)):
@@ -213,7 +214,7 @@ def update_xmp_metadata(trailer, options):
 					xml.etree.ElementTree.register_namespace("dc", "http://purl.org/dc/elements/1.1/")
 					xml.etree.ElementTree.register_namespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#")
 				return xml.etree.ElementTree.tostring(xml_root, encoding='unicode' if sys.version_info>=(3,0) else None)
-		
+
 		# Create a fresh Metadata dictionary and serialize the XML into it.
 		trailer.Root.Metadata = PdfDict()
 		trailer.Root.Metadata.Type = "Metadata"
@@ -561,7 +562,7 @@ class CMap(object):
 				continue
 			if not in_cmap:
 				continue
-			
+
 			if token == "def":
 				name = operand_stack.pop(0)
 				value = operand_stack.pop(0)
