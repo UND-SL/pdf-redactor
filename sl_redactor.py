@@ -39,19 +39,21 @@ options.content_filters = [
 	# See https://github.com/opendata/SSN-Redaction for why this regex is complicated.
 	(
 		re.compile(r"(?<!\d)(?!666|000|9\d{2})([OoIli0-9]{3})([\s-]?)(?!00)([OoIli0-9]{2})\2(?!0{4})([OoIli0-9]{4})(?!\d)"),
-		lambda m : "XXX-XX-XXXX"
+		lambda m : "REMOVED"
 	),
 
-	# Content filter that runs on the text comment annotation body.
+	# Nuke emails
+	# Email regexs are really hard, so we take a more general approach
+	# at the risk of getting rid of a bit too much
 	(
-		re.compile(r"comment!"),
-		lambda m : "annotation?"
+		re.compile(r"[\S]+@[\S]+"),
+		lambda m : "REMOVED"
 	),
 ]
 
 # Filter the link target URI.
 options.link_filters = [
-	lambda href, annotation : "https://www.google.com" 
+	lambda href, annotation : "https://www.google.com"
 ]
 
 # Perform the redaction using PDF on standard input and writing to standard output.
